@@ -10,6 +10,7 @@
 #include <QFileInfo>
 #include <QFile>
 #include <QTextStream>
+#include <QProcess>
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int variable_synapse_index_counter=0;
 long long variable_error;
@@ -22,6 +23,8 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+std::cout << "bez_1" << std::endl;  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////// загрузка нейронов и сигнала из файла в вектор ///////////////////////////////////////////////////////////////////////////////////////
     std::ifstream is(
         // "/home/viktor/my_projects_qt_2/cycle_of_distinguishing_a_one_with_vectors/neurons_and_signal.txt" // 1.bmp
@@ -29,7 +32,7 @@ int main(int argc, char *argv[])
         
         "/home/viktor/my_projects_qt_2/Sgenerirovannye_fayly/0/neyroni_i_signal.txt"
         
-        //NOTE: считывание в вектор нейронов и сигналов из файла (НАДО Менять для подстройки)
+        //NOTE: сигналы 1; считывание в вектор нейронов и сигналов из файла (НАДО Менять для подстройки)
         );
     std::istream_iterator<unsigned long long> start(is), end;
     std::vector<unsigned long long> list_of_neurons(start, end);
@@ -53,17 +56,19 @@ int main(int argc, char *argv[])
 ////            "/home/viktor/my_projects_qt_2/bez_1/error.txt"
 ////            )==true 
 //         QFileInfo::exists(
-//            "/home/viktor/my_projects_qt_2/bez_1/error.txt"
+//         //   "/home/viktor/my_projects_qt_2/bez_1/error.txt"
+//            "/home/viktor/my_projects_qt_2/cycle_of_distinguishing_a_one_with_vectors_GUI/error.txt"
 //            ) && QFileInfo(
-//                   "/home/viktor/my_projects_qt_2/bez_1/error.txt"
+//        //           "/home/viktor/my_projects_qt_2/bez_1/error.txt"
+//               "/home/viktor/my_projects_qt_2/cycle_of_distinguishing_a_one_with_vectors_GUI/error.txt"
 //                   ).isFile()
 //        )
 //        // 
 //    {;;
 //        // считываем ошибку из файла
 //        QFile file(
-//          //  "/home/viktor/my_projects_qt_2/cycle_of_distinguishing_a_one_with_vectors_GUI/error.txt"
-//              "/home/viktor/my_projects_qt_2/bez_1/error.txt"
+//          "/home/viktor/my_projects_qt_2/cycle_of_distinguishing_a_one_with_vectors_GUI/error.txt"
+//            //  "/home/viktor/my_projects_qt_2/bez_1/error.txt"
 //            );
 //        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 //        {;;}
@@ -73,15 +78,16 @@ int main(int argc, char *argv[])
 //        variable_error=line.toLongLong (&ok,10);//.toLongLong ();
 //    }
 //    else
+       variable_error     =   1073741824-list_of_neurons[200] ;
         // если файла с ошибкой нет
         
         // *** конец блока ***
         
         // если хотим включить настройку сопротивлений синапсов блок отсюда и выше до 66 строки закомментируем (отключим)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    variable_error     =   1073741824-list_of_neurons[200] ;
-/// 
- if  ( variable_error <=0)
+ 
+///
+       if  ( variable_error <=0)
     {
        
   std::cout << "Программа считает что это 1." << std::endl;
@@ -90,7 +96,7 @@ int main(int argc, char *argv[])
 /// 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  // если ошибки нет то на выход
- if (variable_error<=0) // тут видимо надо менять на если ошибка = или > то на выход то есть ошибка пропадает если становится > 0
+ if (variable_error>=0) // тут видимо надо менять на если ошибка = или > то на выход то есть ошибка пропадает если становится > 0
      goto d;
  std::cout << "variable_error = " << variable_error<< std::endl;
  std::cout << "Variable error = 1073741824-list_of_neurons[200] = " << 1073741824-list_of_neurons[200]<< std::endl;
@@ -115,7 +121,7 @@ b:
         list_of_neurons[200] = list_of_neurons[200] + (list_of_neurons[neuron_index] / list_of_synapses[synapse_index]);
     }
     variable_error     =   1073741824-list_of_neurons[200] ;
-    if (variable_error<=0) // to the exit
+    if (variable_error>=0) // to the exit
         // goto c;
         goto d;
     if (list_of_synapses[10100]==1) // to the exit
@@ -175,6 +181,27 @@ d:
     }
     else {        std::cout << "Программа считает что это не 1." << std::endl;    } //  меняем на это не 1
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// тут надо записать сигнал и нейроны в файл
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    fstream file3;
+    file3.open(
+        // NOTE: сигналы 2
+
+        // 3:
+        "/home/viktor/my_projects_qt_2/Sgenerirovannye_fayly/0-2/neurons_and_signal.txt"
+        ,ios_base::out);
+    
+    vector<unsigned long long>::iterator itr2;
+    
+    for(itr2=list_of_neurons.begin();itr2!=list_of_neurons.end();itr2++)
+    {
+        file3<<*itr2<<endl;
+    }
+    
+    file3.close();
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///  
+ QProcess().execute("/home/viktor/my_scripts_2/zvuk.sh"); 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///      
     return a.exec();
