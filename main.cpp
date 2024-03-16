@@ -11,6 +11,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QProcess>
+#include <QFileDialog>
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int variable_synapse_index_counter=0;
 long long variable_error;
@@ -31,7 +32,8 @@ std::cout << "bez_1" << std::endl;
         //   "/home/viktor/my_projects_qt_2/Sgenerirovannye_fayly/1-1/neyroni_i_signal.txt" // 1-1.bmp
         
         "/home/viktor/my_projects_qt_2/Sgenerirovannye_fayly/0/neyroni_i_signal.txt"
-        
+       //  "/home/viktor/my_projects_qt_2/Sgenerirovannye_fayly/0-2/neurons_and_signal.txt"
+        // FIXME: тут же файлы надо менять!
         //NOTE: сигналы 1; считывание в вектор нейронов и сигналов из файла (НАДО Менять для подстройки)
         );
     std::istream_iterator<unsigned long long> start(is), end;
@@ -87,7 +89,7 @@ std::cout << "bez_1" << std::endl;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
 ///
-       if  ( variable_error <=0)
+       if  ( variable_error >=0)
     {
        
   std::cout << "Программа считает что это 1." << std::endl;
@@ -174,7 +176,7 @@ d:
         fileOut.close(); // Закрываем файл
     }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    if  ( variable_error <=0)
+    if  ( variable_error >=0)
     {
         
         std::cout << "Программа считает что это 1." << std::endl;
@@ -182,12 +184,16 @@ d:
     else {        std::cout << "Программа считает что это не 1." << std::endl;    } //  меняем на это не 1
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// тут надо записать сигнал и нейроны в файл
+///
+  QString  Nazvaniye_fayla_s_neyronami_i_signalom = QFileDialog::getOpenFileName(this,
+   tr("Open txt"), "/home/viktor/my_projects_qt_2/Sgenerirovannye_fayly", tr("Txt Files (*.txt)"));
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     fstream file3;
     file3.open(
         // NOTE: сигналы 2
 
         // 3:
+        // FIXME: файлы надо менять!
         "/home/viktor/my_projects_qt_2/Sgenerirovannye_fayly/0-2/neurons_and_signal.txt"
         ,ios_base::out);
     
