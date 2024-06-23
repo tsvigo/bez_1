@@ -17,6 +17,8 @@
 int var;
 int neuron_index = 0, synapse_index = 0;
 std::vector<long long> list_of_neurons;
+int variable_synapse_index_counter=0;
+bool all_sinapsi_proydeni=false;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //######################## нейроны ##################################################
 // Функция для чтения 205 long long чисел из бинарного файла
@@ -59,6 +61,24 @@ std::vector<unsigned long long> readNumbersFromFile2(const QString &fileName, si
     file.close();
     return list_of_synapses;
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// файл с синапсами перезаписываем:
+bool writeVectorToFile(const std::vector<unsigned long long> &vec, const std::string &filename)
+{
+    std::ofstream outFile(filename, std::ios::binary);
+    if (!outFile) {
+        std::cerr << "Cannot open the file for writing: " << filename << std::endl;
+        return false;
+    }
+
+    size_t size = vec.size();
+    outFile.write(reinterpret_cast<const char *>(&size), sizeof(size));
+    outFile.write(reinterpret_cast<const char *>(vec.data()), size * sizeof(long long));
+
+    outFile.close();
+    return true;
+}
+
 //###########################################################################
 // конец объявлений функций
 int main(int argc, char *argv[])
@@ -97,8 +117,8 @@ int main(int argc, char *argv[])
     // Вызов диалога выбора файла
     QString fileName_neyroni = QFileDialog::getOpenFileName(nullptr, "Выберите файл",
                                                             //"/home/viktor/1_rukoy/"
-                                                            "/home/viktor/1_rukoy/scale/combined_numbers/"
-                                                            ,  "bin Files (*.bin)");
+           "/home/viktor/1_rukoy/ne_1/scale/combined_numbers/"
+               ,  "bin Files (*.bin)");
 
     // Проверка, был ли файл выбран
     if (!fileName_neyroni.isEmpty()) {
@@ -125,6 +145,9 @@ int main(int argc, char *argv[])
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //###########################################################################
 //###########################################################################
+b:
+    if       (list_of_neurons.at(200)>=0) goto d; // не 1 - на выход
+    if (variable_synapse_index_counter==10100)variable_synapse_index_counter=0;
     // блок вычисления-решения 200 нейрона
     // проверка - решение
     for (var = 100; // первый for
@@ -173,24 +196,92 @@ int main(int argc, char *argv[])
     }
 
 //####### конец вычисления 200 нейрона ####################################################################
+  // variable_synapse_index_counter++;  // ?
+    // увеличиваем  индекс синапса
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
  /////////////   показываем что определила программа
     if
         (list_of_neurons.at(200) < 0)
         {
-        std::cout << "Программа считает что это 1." << std::endl;
+        std::cout << "Программа считает что это 1.-204" << std::endl;
+        variable_synapse_index_counter++;
+        // увеличиваем  индекс синапса
     }
     if (list_of_neurons.at(200) >= 0)
     {
-        std::cout << "Программа считает что это не 1." << std::endl;
+        std::cout << "Программа считает что это не 1.-208" << std::endl;
+        exit(0);
     }
 //########################################################################################################
     std::cout << "(после решения): list_of_neurons->at(200) = "
               << list_of_neurons.at(200) << std::endl;
 /// подстройка //////////////////////////////////////////////////////////////////////////////////////////////
+    /// подстройка //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    if       (list_of_neurons.at(200)<0) // если Программа считает что это 1.
+
+    {
+        list_of_synapses.at(variable_synapse_index_counter)
+            =
+            list_of_synapses.at(variable_synapse_index_counter)
+            // -
+            +
+            1
+            //  10
+            // 9223372036854775807
+            // 1459315198938531889
+            // 859689765
+            ;
 
 
+        if (variable_synapse_index_counter==10105 &&
+            list_of_synapses.at(variable_synapse_index_counter)>=9223372036854775807
+            //  -9223372036854775808
+            )
+        {
+            all_sinapsi_proydeni=true;
+            goto e;
+        }
+        if(variable_synapse_index_counter==10105)variable_synapse_index_counter=0;
+        if(list_of_neurons.at(200)<0) //  1
+            goto b;
+        if(list_of_neurons.at(200)>=0) // не 1
+            goto d;
+    }
+    else goto d;
+e:
+    std::cout << "все синапсы пройдены, поставлены на максимумы и ошибка не пропала." << std::endl;
+    if(all_sinapsi_proydeni==true) exit(0);
+////  конец подстройки /////////////////////////////////////////////////////////////////////////////////////////////////////////
+   d:
+    if (list_of_neurons.at(200)>=0)
+    {
 
+        std::cout << "Программа считает что это не 1.-255"<< std::endl;
+    }
+    //###########################################################################//###########################################################################
+    // запишем синапсы
+    if (list_of_synapses.empty()==true)
+
+    {
+        std::cout << "\nTrue: ";
+
+        std::cout << "Вектор пуст"<< std::endl;
+
+    }
+    //###########################################################################
+    // Указываем путь к файлу
+    std::string filename = "/home/viktor/my_projects_qt_2/sgenerirovaty_sinapsi/random_sinapsi.bin";
+
+    if (!writeVectorToFile(list_of_synapses, filename))
+    {
+      std::cout << "Ошибка перезаписи /home/viktor/my_projects_qt_2/sgenerirovaty_sinapsi/random_sinapsi.bin"<< std::endl;
+    }
+    //###########################################################################
+
+    qDebug() << "Program execution completed.";
+    //###########################################################################//####################################
 
 
 
