@@ -97,6 +97,24 @@ bool writeVectorToFile(const std::vector<unsigned long long> &vec, const std::st
     return true;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// новая функция записи вектора синапсов в файл:
+void writeVectorToBinaryFile(const QString &filename, const std::vector<unsigned long long> &vector)
+{
+    QFile file(filename);
+    if (!file.open(QIODevice::WriteOnly)) {
+        throw std::runtime_error("Ошибка открытия файла для записи.");
+    }
+
+    QDataStream out(&file);
+    for (auto value : vector) {
+        out << value;
+    }
+
+    file.close();
+}
+// объявление:
+void writeVectorToBinaryFile(const QString &filename, const std::vector<unsigned long long> &vector);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //###########################################################################
 // конец объявлений функций
 int main(int argc, char *argv[])
@@ -107,6 +125,8 @@ int main(int argc, char *argv[])
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Указываем путь к файлу
     std::string filename_sinapsi = "/home/viktor/my_projects_qt_2/sgenerirovaty_sinapsi/random_sinapsi.bin";
+    // Указываем путь к файлу
+    QString filename_sinapsi_2 = "/home/viktor/my_projects_qt_2/sgenerirovaty_sinapsi/random_sinapsi.bin";
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //########################################################################################################
     std::cout << "bez_1" << std::endl;
@@ -285,7 +305,8 @@ b:
         //     ;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        goto d;
+        goto f;//d;
+        // не перезаписывая файл с синапсами выходим
     }
 //########################################################################################################
     std::cout << "(после решения): list_of_neurons->at(200) = "
@@ -354,6 +375,19 @@ e:
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //    writeVectorToFile(list_of_synapses, filename_sinapsi);
     // запись синапсов в файл (дерьмо)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Указываем путь к файлу
+//    QString filename = "/path/to/your/outputfile.bin";
+
+    try {
+        writeVectorToBinaryFile(filename_sinapsi_2, list_of_synapses);
+        qDebug() << "Вектор успешно записан в бинарный файл.";
+    } catch (const std::exception &e)
+    {
+        qCritical() << e.what();
+        return 1;
+    }
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //    !=true)
     {
