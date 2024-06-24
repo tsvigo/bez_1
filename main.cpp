@@ -87,6 +87,9 @@ int main(int argc, char *argv[])
     // Используем QApplication вместо QCoreApplication, чтобы поддерживать графические компоненты
     QApplication app(argc, argv);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Указываем путь к файлу
+    std::string filename_sinapsi = "/home/viktor/my_projects_qt_2/sgenerirovaty_sinapsi/random_sinapsi.bin";
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //########################################################################################################
     std::cout << "bez_1" << std::endl;
     //########################################################################################################
@@ -145,10 +148,17 @@ int main(int argc, char *argv[])
     }
 //###########################################################################
 ////////////////////////// считали нейроны в вектор ////////////////////////////////////////////////////////////////////////////////////////////////
+    bool zapisivaty_synapsi=false;
 //###########################################################################
+    if       (list_of_neurons.at(200)>=0)
+    {
+        std::cout << "сразу; list_of_neurons->at(200) = "
+                  << list_of_neurons.at(200) << std::endl;
+        goto f;
+    }
 //###########################################################################
 b:
-    if       (list_of_neurons.at(200)>=0) goto d; // не 1 - на выход
+    if       (list_of_neurons.at(200)>=0) goto d;//d; // не 1 - на выход
     if (variable_synapse_index_counter==10100)variable_synapse_index_counter=0;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // блок вычисления-решения 200 нейрона
@@ -200,7 +210,7 @@ b:
     }
 
 //####### конец вычисления 200 нейрона ####################################################################
-  // variable_synapse_index_counter++;  // ?
+//variable_synapse_index_counter++;  // ?
     // увеличиваем  индекс синапса
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -218,6 +228,15 @@ b:
                   << list_of_neurons.at(200) << std::endl;
         std::cout << "Программа считает что это не 1.-215" << std::endl;
        // exit(0);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // list_of_synapses.at(variable_synapse_index_counter)
+        //     =
+        //     list_of_synapses.at(variable_synapse_index_counter)
+        //      +
+        //      1
+        //     ;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         goto d;
     }
 //########################################################################################################
@@ -281,16 +300,18 @@ e:
     }
     //###########################################################################
     // Указываем путь к файлу
-    std::string filename = "/home/viktor/my_projects_qt_2/sgenerirovaty_sinapsi/random_sinapsi.bin";
+ //   std::string filename = "/home/viktor/my_projects_qt_2/sgenerirovaty_sinapsi/random_sinapsi.bin";
 
-    if (!writeVectorToFile(list_of_synapses, filename))
+ //   if (
+        writeVectorToFile(list_of_synapses, filename_sinapsi);
+    //    !=true)
     {
-      std::cout << "Ошибка перезаписи /home/viktor/my_projects_qt_2/sgenerirovaty_sinapsi/random_sinapsi.bin"<< std::endl;
+  //    std::cout << "Ошибка перезаписи /home/viktor/my_projects_qt_2/sgenerirovaty_sinapsi/random_sinapsi.bin"<< std::endl;
     }
-    else
-    std::cout << "/home/viktor/my_projects_qt_2/sgenerirovaty_sinapsi/random_sinapsi.bin перезаписан"<< std::endl;
+ //   else
+ //   std::cout << "/home/viktor/my_projects_qt_2/sgenerirovaty_sinapsi/random_sinapsi.bin перезаписан"<< std::endl;
     //###########################################################################
-
+f:
     qDebug() << "Program execution completed.";
     //###########################################################################//####################################
     exit(0);
