@@ -17,6 +17,7 @@
 int var;
 int neuron_index = 0, synapse_index = 0;
 std::vector<long long> list_of_neurons;
+std::vector<unsigned long long> list_of_synapses;
 int variable_synapse_index_counter=0;
 bool all_sinapsi_proydeni=false;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,6 +63,23 @@ std::vector<unsigned long long> readNumbersFromFile2(const QString &fileName, si
     return list_of_synapses;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+std::vector<unsigned long long> read10105UnsignedLongLongFromBinaryFile(const std::string &filename)
+{
+    std::ifstream file(filename, std::ios::binary);
+    if (!file) {
+        throw std::runtime_error("Ошибка открытия бинарного файла.");
+    }
+
+    std::vector<unsigned long long> list_of_synapses(10106);
+    file.read(reinterpret_cast<char *>(list_of_synapses.data()), 10106 * sizeof(unsigned long long));
+
+    if (file.gcount() != 10106 * sizeof(unsigned long long)) {
+        throw std::runtime_error("Недостаточно данных в бинарном файле.");
+    }
+
+    return list_of_synapses;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // файл с синапсами перезаписываем:
 bool writeVectorToFile(const std::vector<unsigned long long> &vec, const std::string &filename)
 {
@@ -73,12 +91,12 @@ bool writeVectorToFile(const std::vector<unsigned long long> &vec, const std::st
 
     size_t size = vec.size();
     outFile.write(reinterpret_cast<const char *>(&size), sizeof(size));
-    outFile.write(reinterpret_cast<const char *>(vec.data()), size * sizeof(long long));
+    outFile.write(reinterpret_cast<const char *>(vec.data()), size * sizeof(unsigned long long));
 
     outFile.close();
     return true;
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //###########################################################################
 // конец объявлений функций
 int main(int argc, char *argv[])
@@ -94,6 +112,7 @@ int main(int argc, char *argv[])
     std::cout << "bez_1" << std::endl;
     //########################################################################################################
 //////////////////////////////// синапсы: ///////////////////////////////////////////////////////////////////////////////////////////*
+// читаем синапсы из файла в вектор:
     const QString fileName
         =
         "/home/viktor/my_projects_qt_2/sgenerirovaty_sinapsi/random_sinapsi.bin"
@@ -102,14 +121,31 @@ int main(int argc, char *argv[])
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const size_t numberCount = 10105;
     // Чтение чисел из бинарного файла
-    std::vector<unsigned long long> list_of_synapses = readNumbersFromFile2(fileName, numberCount);
-
+   // std::vector<unsigned long long> list_of_synapses = readNumbersFromFile2(fileName, numberCount);
+    // Преобразование QString в std::string
+    std::string stdFileName_sinapsi = fileName.toStdString();
+   list_of_synapses= read10105UnsignedLongLongFromBinaryFile(stdFileName_sinapsi);
     // Проверка, что прочитано правильное количество чисел
     if (list_of_synapses.size() != numberCount) {
         std::cerr << "File does not contain the expected number of numbers." << std::endl;
     }
     std::cout << "list_of_synapses.size() =" << list_of_synapses.size() << std::endl;
     std::cout << "конец чтения синапсов в вектор" << std::endl;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Проверка содержимого вектора
+    for (size_t i = 0; i < list_of_synapses.size(); ++i) {
+        std::cout << "Synaps " << i << ": " << list_of_synapses[i] << std::endl;
+    }
+
+    // Проверка значения по индексу 10105
+    if (list_of_synapses.size() // <
+        >
+        10105) {
+        std::cout << "list_of_synapses.at(10105) = " << list_of_synapses.at(10105) << std::endl;
+    } else {
+        std::cerr << "Вектор недостаточного размера." << std::endl;
+    }
+    //###########################################################################
     std::cout << "//"
                  "#################################################################################"
                  "#######################"
@@ -133,7 +169,7 @@ int main(int argc, char *argv[])
     }
     // Преобразование QString в std::string
     std::string stdFileName_neyroni = fileName_neyroni.toStdString();
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     try {
         // Чтение 205 long long чисел из бинарного файла в
         //  std::vector<long long>
@@ -145,6 +181,18 @@ int main(int argc, char *argv[])
 
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
+    }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Проверка содержимого вектора
+    for (size_t i = 0; i < list_of_neurons.size(); ++i) {
+        std::cout << "Neuron " << i << ": " << list_of_neurons[i] << std::endl;
+    }
+
+    // Проверка значения по индексу 200
+    if (list_of_neurons.size() > 200) {
+        std::cout << "list_of_neurons.at(200) = " << list_of_neurons.at(200) << std::endl;
+    } else {
+        std::cerr << "Вектор недостаточного размера." << std::endl;
     }
 //###########################################################################
 ////////////////////////// считали нейроны в вектор ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -303,7 +351,10 @@ e:
  //   std::string filename = "/home/viktor/my_projects_qt_2/sgenerirovaty_sinapsi/random_sinapsi.bin";
 
  //   if (
-        writeVectorToFile(list_of_synapses, filename_sinapsi);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //    writeVectorToFile(list_of_synapses, filename_sinapsi);
+    // запись синапсов в файл (дерьмо)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //    !=true)
     {
   //    std::cout << "Ошибка перезаписи /home/viktor/my_projects_qt_2/sgenerirovaty_sinapsi/random_sinapsi.bin"<< std::endl;
