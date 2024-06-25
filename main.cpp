@@ -13,6 +13,7 @@
 #include <iostream>
 #include <QApplication>
 //#include <QWidget>
+#include <QIcon>
 //############################ переменные: ###############################################
 int var;
 int neuron_index = 0, synapse_index = 0;
@@ -122,6 +123,14 @@ int main(int argc, char *argv[])
    // QCoreApplication a(argc, argv);
     // Используем QApplication вместо QCoreApplication, чтобы поддерживать графические компоненты
     QApplication app(argc, argv);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    QIcon appIcon;
+    appIcon.addFile("/home/viktor/my_projects_qt_2/bez_1/icons/16x16.png", QSize(16, 16));
+    appIcon.addFile("/home/viktor/my_projects_qt_2/bez_1/icons/32x32.png", QSize(32, 32));
+    appIcon.addFile("/home/viktor/my_projects_qt_2/bez_1/icons/64x64.png", QSize(64, 64));
+    appIcon.addFile("/home/viktor/my_projects_qt_2/bez_1/icons/128x128.png", QSize(128, 128));
+
+    app.setWindowIcon(appIcon);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Указываем путь к файлу
     std::string filename_sinapsi = "/home/viktor/my_projects_qt_2/sgenerirovaty_sinapsi/random_sinapsi.bin";
