@@ -117,6 +117,24 @@ void writeVectorToBinaryFile(const QString &filename, const std::vector<unsigned
 // объявление:
 void writeVectorToBinaryFile(const QString &filename, const std::vector<unsigned long long> &vector);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+long long activationFunction( // long long list_of_neurons.at(var)
+    int var
+    //  ,
+    //   int b
+    )
+{
+    long long base, exponent, result;
+
+    unsigned long long giperparametr =0;//2;//200;
+    base=3; /// тут скорее 3 потому что 2,7
+    exponent = list_of_neurons.at(var); // степень
+    result = pow(base, exponent);
+    if (list_of_neurons.at(var) <= 0)
+        list_of_neurons.at(var) =list_of_neurons.at(var) * giperparametr * (result - 1);
+    return (  list_of_neurons.at(var));
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //###########################################################################
 // конец объявлений функций
 int main(int argc, char *argv[])
@@ -270,13 +288,20 @@ b:
                 //  std::cerr << "Caught an exception: " << e.what() << '\n';
             }
 
-        } //
-    }
+        } //  for 2
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // тут видимо умножать на функцию активации
+        //  activationFunction(var)
+        list_of_neurons.at(var)=list_of_neurons.at(var)*activationFunction(var);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    }  //  for 1
     //////////////////////
     for (int neuron_index = 100, synapse_index = 10000; // второй for
 
          synapse_index < 10100;
-         ++neuron_index, ++synapse_index) {
+         ++neuron_index, ++synapse_index)
+    {
         //      if (list_of_synapses->at(synapse_index)!=0)
         list_of_neurons.at(200)
             //###########################################################################
@@ -286,7 +311,11 @@ b:
                   -                                     // вычитание
                   list_of_synapses.at(synapse_index))); // + на -
     }
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // тут видимо умножать на функцию активации
+    //  activationFunction(var)
+    list_of_neurons.at(200)=list_of_neurons.at(200)*activationFunction(200);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //####### конец вычисления 200 нейрона ####################################################################
 /////////////////// конец решения ///////////////////////////////////////////////////////////////////////////////////////////////////////
 //variable_synapse_index_counter++;  // ?
